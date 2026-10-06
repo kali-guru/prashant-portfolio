@@ -101,3 +101,8 @@ The foreground contrast crossover uses relative luminance **0.179**, rather than
 ## Validation
 
 `npm run typecheck` and `npm run build` pass. Local structural checks cover unique IDs, internal targets, document links, no missing public assets, and unchanged certificate bytes. Browser visual QA was unavailable in the build session; review desktop/mobile layout, keyboard behavior and motion in your browser before treating the design as visually signed off.
+
+
+## Readability and performance update
+
+The statement now places its heading, shield and copy in separate layout rows so the shield cannot obscure text. The globe has bundled, simplified continent silhouettes with a matching static SVG fallback. It is a decorative map, not a navigation map. It stays still until dragged or adjusted with arrow keys, and stops rendering when inertia settles. Snow, pointer parallax, the intro and continuous fog/shimmer animation are disabled by default. The globe caps pixel ratio at 1.5 and uses fewer wireframe points. Scroll progress no longer updates inherited page-wide color variables on every animation frame; the explicit section palettes remain unchanged.

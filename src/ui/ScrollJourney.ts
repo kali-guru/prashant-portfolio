@@ -13,7 +13,8 @@ export class ScrollJourney {
   private previousTime = 0;
   private maxScroll = 1;
   private viewport = window.innerHeight;
-  private root = document.documentElement.style;
+  private gauge = document.querySelector<HTMLElement>('.altimeter');
+  private lastZone = -1;
   private lines = Array.from(document.querySelectorAll<HTMLElement>('.manifesto h2>span'));
   constructor() {
     this.sections = Array.from(document.querySelectorAll<HTMLElement>('.journey')).map(el => {
@@ -70,23 +71,13 @@ export class ScrollJourney {
         if (!this.reduced) this.apply(s);
       }
       this.zone = this.sections[zoneIndex]?.el.dataset.zone || 'GROUND';
-      const current = this.sections[zoneIndex];
-      const next = this.sections[Math.min(zoneIndex + 1, this.sections.length - 1)];
-      const blend = range(this.y + this.viewport * .45, next.top - this.viewport * .5, next.top);
-      const r = Math.round(current.rgb[0] + (next.rgb[0] - current.rgb[0]) * blend);
-      const g = Math.round(current.rgb[1] + (next.rgb[1] - current.rgb[1]) * blend);
-      const b = Math.round(current.rgb[2] + (next.rgb[2] - current.rgb[2]) * blend);
-      this.root.setProperty('--bg', 'rgb(' + r + ',' + g + ',' + b + ')');
-      // Relative luminance crossover .179 guarantees at least 4.5:1 for black/white.
-      const luminance = .2126 * this.linear(r) + .7152 * this.linear(g) + .0722 * this.linear(b);
-      this.root.setProperty('--fg', luminance > .179 ? '#000000' : '#ffffff');
-      this.root.setProperty('--page-p', this.pageProgress.toFixed(4));
+      if (zoneIndex !== this.lastZone) this.lastZone = zoneIndex;
+      this.gauge?.style.setProperty('--page-p', this.pageProgress.toFixed(4));
       this.dirty = moving;
     }
     for (let i = 0; i < this.clients.length; i++) if (this.clients[i](time, dt)) moving = true;
     if (moving || this.dirty) this.wake();
   };
-  private linear(value: number): number {const s = value / 255; return s <= .04045 ? s / 12.92 : Math.pow((s + .055) / 1.055, 2.4);}
   private apply(s: JourneySection): void {
     const p = s.p, style = s.el.style;
     if (s.el.id === 'top') {

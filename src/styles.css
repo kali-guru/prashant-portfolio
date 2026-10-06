@@ -33,3 +33,25 @@ html[data-intensity=subtle] .fog,html[data-intensity=subtle] .glass-sweep{animat
 @media(max-width:599px){.motion .window-shell{padding:12px}}
 
 .noscript-nav{position:relative;z-index:59;display:flex;gap:20px;justify-content:center;padding:100px 20px 20px;background:#0b0d10;color:#f3f5f6;font:11px var(--mono)}
+
+/* Readable statement: heading, shield and copy each occupy their own row. */
+html{overflow-x:clip}
+.statement,.motion .statement{height:auto;overflow:clip}
+.statement .statement-inner,.motion .statement .statement-inner{position:relative;height:auto;min-height:0;display:grid;gap:clamp(28px,4vw,64px);padding:110px var(--gutter) 75px}
+.statement .split-title,.motion .statement .split-title{position:relative;z-index:3;margin:0;display:flex;flex-direction:row;justify-content:center;gap:.22em;flex-wrap:wrap;font-size:clamp(54px,9.5vw,165px);line-height:1.12;letter-spacing:-.055em}
+.statement .split-title>span,.motion .statement .split-title>span{transform:none;align-self:auto}
+.statement .object-stage,.motion .statement .object-stage{position:relative;top:auto;left:auto;transform:none;translate:none;rotate:none;width:clamp(170px,22vw,290px);height:clamp(240px,32vw,390px);justify-self:center}
+.statement .shield-object{filter:none}
+.statement .statement-copy,.motion .statement .statement-copy{position:relative;bottom:auto;left:auto;right:auto;width:100%;max-width:720px;justify-self:center;opacity:1;transform:none;gap:30px}
+.statement .sky-note{position:static;display:block;text-align:center}
+.location-title{position:relative;font:500 clamp(32px,5vw,76px)/1.15 var(--calm);letter-spacing:-.04em;margin-top:45px}
+.location-layout{grid-template-columns:minmax(0,1fr) minmax(0,1.35fr);gap:clamp(24px,5vw,80px)}
+.globe-wrap{width:100%;max-width:520px;min-height:0;justify-self:center;aspect-ratio:1;padding:0;margin-bottom:85px;isolation:isolate}
+.globe-caption{top:100%;bottom:auto;padding-top:12px;font-size:clamp(17px,1.6vw,24px)}
+.globe-hint{top:calc(100% + 75px);bottom:auto;font-size:8px}
+.fog,.glass-sweep,.motion .scroll-cue,.motion .footer-wordmark.visible{animation:none}
+.motion .project-picker li{filter:none!important}
+.motion .split-title{letter-spacing:-.055em}
+.motion .window-shell,.motion .window-glass{box-shadow:none}
+.motion .manifesto-fog i{translate:none}
+@media(max-width:699px){.location-layout{grid-template-columns:1fr}.stat-card{width:100%;max-width:none}.globe-wrap{max-width:440px}.statement .statement-inner,.motion .statement .statement-inner{padding-top:95px}.statement .split-title,.motion .statement .split-title{font-size:clamp(48px,12vw,78px)}.statement .statement-copy{gap:16px}.statement-copy p{font-size:17px}}
