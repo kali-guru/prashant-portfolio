@@ -30,3 +30,5 @@ Preserve no-JS readable HTML, semantic headings, visible focus, skip link, mobil
 Run `npm run typecheck` and `npm run build` after substantive changes. Do not add test frameworks for cosmetic changes. Run `npm run prepare:pages` to regenerate tracked `docs/` for GitHub Pages. Do not hand-edit generated assets. No CI workflow by default. Do not change DNS, repository access or credentials as part of source edits. README documents hosting and content replacement.
 
 Terminal commands are local simulations only. Never use eval, shell execution or runtime API calls. Keep CV claims factual and student-level; no invented work history, graduation dates or proficiency claims.
+
+The latest user-approved design uses a consistent dark navy/cyan palette throughout, a maximum 1320px content width, a rotating 3D hero globe (Canvas 2D projection, max 30fps), CSS 3D orbit rings and fine-pointer visual-panel tilt. Keep body text flat/readable and all motion pausable. Do not restore light sky sections or long pinned manifesto tracks.

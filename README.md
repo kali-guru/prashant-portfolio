@@ -50,9 +50,9 @@ Portfolio files are read-only. Workspace files are limited to simple .txt names 
 
 ## Motion and accessibility
 
-Primary settings are in `src/config/motion.ts`. The new hero uses CSS transform animations managed by `src/ui/Hero.ts`; animations pause when hidden/offscreen and have a visible pause button. OS reduced motion disables them. The original high-cost snow, pointer parallax and intro remain off.
+Primary settings are in `src/config/motion.ts`. The hero combines a rotating 3D globe projected with Canvas 2D and CSS 3D orbit rings. The shared scheduler caps canvas drawing at 30fps; animations pause when hidden/offscreen and have a visible pause button managed by `src/ui/Hero.ts`. OS reduced motion disables them. The original high-cost snow, pointer parallax and intro remain off.
 
-`ScrollJourney` owns the shared JavaScript frame scheduler with cached section measurements. The globe has simplified continent silhouettes and redraws only during interaction or settling inertia; it stops offscreen and caps device pixel ratio at 1.5. It is decorative, not a navigation map.
+`ScrollJourney` owns the shared JavaScript frame scheduler with cached section measurements. Both globes use simplified continent silhouettes. The location globe redraws only during interaction or settling inertia; the hero globe also rotates automatically while visible and unpaused. Both stop offscreen and cap device pixel ratio at 1.5. It is decorative, not a navigation map.
 
 The statement heading, shield and copy occupy separate rows to avoid obscured text. No-JS content remains readable, with native accordions and a static globe fallback. Semantic headings, a skip link, visible focus, a mobile menu focus trap and keyboard controls are included.
 
@@ -65,3 +65,9 @@ Strict TypeScript, Vite, vanilla CSS, inline SVG and Canvas 2D. Anton 400, Syne 
 TypeScript and production build pass. Terminal checks cover supported commands, immutable profile files, invalid paths, literal HTML handling, external scan rejection, history caps and reset. Internal anchors and file downloads resolve. The CV is one page.
 
 Browser visual QA is unavailable in this environment. Review the deployed page at desktop/mobile sizes and test keyboard navigation before treating it as visually signed off.
+
+## Unified visual system
+
+All sections use the same dark navy/cyan palette and a shared maximum content width of 1320px. Tablet navigation collapses at 1100px. Typography, certificate rows, CV links and contact rows adapt to narrow screens without overlapping decorative elements. `src/ui/Depth.ts` adds bounded CSS perspective tilt to visual panels only, for fine pointers, and resets on pointer leave or motion pause. Text-heavy areas stay flat. The old long manifesto scroll track is removed so its text remains immediately readable.
+
+Additional renderer checks confirm the 30fps draw cap, pause/resume behavior and offscreen shutdown. These are programmatic checks, not browser/device performance measurements.

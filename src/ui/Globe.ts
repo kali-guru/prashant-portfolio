@@ -2,8 +2,8 @@ import { worldLand } from '../config/worldLand';
 import { clamp, motion } from '../config/motion';
 import type { ScrollJourney } from './ScrollJourney';
 
-export function initGlobe(engine: ScrollJourney): void {
-  const canvas = document.querySelector<HTMLCanvasElement>('#globe');
+export function initGlobe(engine: ScrollJourney, selector = '#globe', autoRotate = false): void {
+  const canvas = document.querySelector<HTMLCanvasElement>(selector);
   if (!canvas) return;
   const ctx = canvas.getContext('2d');
   if (!ctx) return;
@@ -24,6 +24,7 @@ export function initGlobe(engine: ScrollJourney): void {
   const latitude = 27.7172 * Math.PI / 180, longitude = 85.324 * Math.PI / 180;
   const markerX = Math.cos(latitude) * Math.sin(longitude), markerY = Math.sin(latitude), markerZ = Math.cos(latitude) * Math.cos(longitude);
   let width = 1, height = 1, radius = 1, yaw = longitude, pitch = -.12;
+  let elapsed = 0;
   let active = false, needsDraw = true, dragging = false, lastX = 0, lastY = 0, velocity = 0;
   const animated = !engine.reduced && motion.intensity !== 'subtle';
   const resize = (): void => {
@@ -47,6 +48,7 @@ export function initGlobe(engine: ScrollJourney): void {
     const release = (): void => {dragging = false; engine.wake();};
     canvas.addEventListener('pointerup', release); canvas.addEventListener('pointercancel', release); canvas.addEventListener('lostpointercapture', release);
   }
+  document.addEventListener('portfolio-motion-change', () => {velocity = 0; needsDraw = true; engine.wake();});
   canvas.addEventListener('keydown', event => {
     if (!['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(event.key)) return;
     event.preventDefault();
@@ -57,9 +59,14 @@ export function initGlobe(engine: ScrollJourney): void {
     velocity = 0; needsDraw = true; engine.wake();
   });
   engine.add((_time, dt) => {
-    if (!active || (!needsDraw && Math.abs(velocity) < .0005)) return false;
+    const spinning = autoRotate && animated && !document.documentElement.classList.contains('motion-paused');
+    if (!active || (!spinning && !needsDraw && Math.abs(velocity) < .0005)) return false;
+    elapsed += dt;
+    if (!needsDraw && elapsed < 1000 / 30) return spinning || Math.abs(velocity) >= .0005;
+    const step = Math.min(elapsed, 100); elapsed = 0;
+    if (spinning && !dragging) yaw += .12 * step / 1000;
     if (animated && !dragging) {
-      yaw += velocity * dt / 16.67; velocity *= Math.pow(motion.globe.damping, dt / 16.67);
+      yaw += velocity * step / 16.67; velocity *= Math.pow(motion.globe.damping, step / 16.67);
       if (Math.abs(velocity) < .0005) velocity = 0;
     }
     const cy = Math.cos(yaw), sy = Math.sin(yaw), cp = Math.cos(pitch), sp = Math.sin(pitch);
@@ -88,7 +95,7 @@ export function initGlobe(engine: ScrollJourney): void {
       }
       ctx.stroke();
     }
-    ctx.fillStyle = '#9fc9df'; ctx.beginPath();
+    ctx.fillStyle = '#75e7e1'; ctx.beginPath();
     for (let i = 0; i < worldLand.length; i += 3) {
       const x = worldLand[i] * cy - worldLand[i + 2] * sy;
       const z = worldLand[i] * sy + worldLand[i + 2] * cy;
@@ -102,7 +109,7 @@ export function initGlobe(engine: ScrollJourney): void {
     ctx.strokeStyle = '#a9ccdf60'; ctx.beginPath(); ctx.arc(centerX, centerY, radius, 0, Math.PI * 2); ctx.stroke();
     const mx = markerX * cy - markerZ * sy, mz = markerX * sy + markerZ * cy;
     const my = markerY * cp - mz * sp, depth = markerY * sp + mz * cp;
-    if (depth > .3) {
+    if (!autoRotate && depth > .3) {
       const px = centerX + mx * radius, py = centerY - my * radius;
       const pulse = 0;
       ctx.fillStyle = '#b6e0ff'; ctx.beginPath(); ctx.arc(px, py, 3, 0, Math.PI * 2); ctx.fill();
@@ -113,6 +120,6 @@ export function initGlobe(engine: ScrollJourney): void {
       ctx.fillStyle = '#e1f1fc'; ctx.fillText('KATHMANDU', labelX, py + 3);
     }
     needsDraw = false;
-    return animated && !dragging && Math.abs(velocity) >= .0005;
+    return spinning || (animated && !dragging && Math.abs(velocity) >= .0005);
   });
 }

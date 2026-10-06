@@ -21,5 +21,5 @@ export function initHeader(): void {
       else if (!e.shiftKey && document.activeElement === toggle) {e.preventDefault(); first.focus();}
     }
   });
-  window.matchMedia('(min-width: 900px)').addEventListener('change', e => {if (e.matches) close(false);});
+  window.matchMedia('(min-width: 1101px)').addEventListener('change', e => {if (e.matches) close(false);});
 }
