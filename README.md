@@ -96,7 +96,7 @@ The foreground contrast crossover uses relative luminance **0.179**, rather than
 - Self-hosted Latin subsets: Anton 400, Syne 500/600, JetBrains Mono 400
 - Body type uses the operating system sans-serif stack
 - Procedural mountain geometry, gradients, fog, shield and project art; no stock photography
-- Font licenses are distributed with their `@fontsource` packages in `node_modules`
+- Font licenses are included in `public/font-licenses/` and deployed with the site
 
 ## Validation
 

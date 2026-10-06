@@ -1,0 +1,40 @@
+import './styles.css';
+import { applyMotionTokens, motion, reducedMotion } from './config/motion';
+import { ScrollJourney } from './ui/ScrollJourney';
+import { initHeader } from './ui/Header';
+import { initIntro } from './ui/Intro';
+import { initReveal } from './ui/Reveal';
+import { initScramble } from './ui/Scramble';
+import { initCounters } from './ui/Counter';
+import { initAccordion } from './ui/Accordion';
+import { initSlabs } from './ui/Slabs';
+import { initProjectPicker } from './ui/ProjectPicker';
+import { initGlobe } from './ui/Globe';
+import { initSnow } from './ui/Snow';
+import { initAltimeter } from './ui/Altimeter';
+import { initPointer } from './ui/Pointer';
+
+applyMotionTokens();
+if (!reducedMotion.matches) document.documentElement.classList.add('motion');
+document.documentElement.dataset.intensity = motion.intensity;
+const engine = new ScrollJourney();
+initHeader();
+initReveal(engine.reduced);
+initAccordion();
+initSlabs(engine.reduced);
+initScramble(engine.reduced);
+initCounters(engine);
+initProjectPicker(engine);
+initGlobe(engine);
+initSnow(engine);
+initAltimeter(engine);
+initPointer(engine);
+initIntro(engine);
+window.addEventListener('resize', applyMotionTokens, {passive: true});
+// Reload applies a changed OS motion preference without leaving old animation clients running.
+reducedMotion.addEventListener('change', () => window.location.reload());
+const clock = document.querySelector<HTMLTimeElement>('#local-time');
+const timeFormatter = new Intl.DateTimeFormat('en-GB', {timeZone: 'Asia/Kathmandu', hour: '2-digit', minute: '2-digit', hour12: false});
+function updateTime(): void {if (clock) {clock.textContent = timeFormatter.format(new Date()) + ' NPT'; clock.dateTime = new Date().toISOString();}}
+updateTime();
+window.setInterval(updateTime, 30000);
