@@ -1,3 +1,5 @@
+import { initHero } from './ui/Hero';
+import { initTerminal } from './ui/Terminal';
 import './styles.css';
 import { applyMotionTokens, motion, reducedMotion } from './config/motion';
 import { ScrollJourney } from './ui/ScrollJourney';
@@ -19,6 +21,8 @@ if (!reducedMotion.matches) document.documentElement.classList.add('motion');
 document.documentElement.dataset.intensity = motion.intensity;
 const engine = new ScrollJourney();
 initHeader();
+initHero();
+initTerminal();
 initReveal(engine.reduced);
 initAccordion();
 initSlabs(engine.reduced);

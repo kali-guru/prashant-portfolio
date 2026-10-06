@@ -1,108 +1,67 @@
-# Prashant Gurung / ALTITUDE
+# Prashant Gurung / Cybersecurity Portfolio
 
-A static cybersecurity student portfolio: a night-glacier window opens into sky, followed by a profile, learning focus, future project spaces, original certificates, a Kathmandu globe and contact details.
+A static, recruiter-facing student portfolio with a dark cyan cybersecurity hero, lightweight animation, interactive terminal, education, certificate downloads, a globe and a one-page CV.
 
-## Run locally
+## Development
 
-Requires Node.js 22.12+ (Node 24 recommended).
+Node.js 22.12+ is required (Node 24 recommended).
 
 ```sh
 npm ci
 npm run dev
-```
-
-```sh
 npm run typecheck
 npm run build
 npm run preview
 ```
 
-`dist/` is the complete production site. Upload its contents to any static host. Vite uses relative asset paths, so the output also supports a repository subpath. No backend, database, framework, analytics, tracking, CDN or runtime API requests are used. Outbound profile and contact links navigate only when selected.
+Production output is `dist/`. No backend, database, runtime APIs, UI framework, CDN fonts or analytics. Assets use relative paths and work under a repository subpath.
 
-## GitHub Pages
+## Publish to GitHub Pages
 
-A ready-to-serve copy is committed in `docs/`. No Actions workflow is required.
-
-1. In this repository, open **Settings > Pages**.
-2. Under **Build and deployment**, select **Deploy from a branch**.
-3. Select **main**, folder **/docs**, and save.
-4. For the supplied custom domain, set **prashantgrg.com.np** in Pages and configure its DNS for GitHub Pages. The provided CNAME contains this domain. Enable HTTPS after GitHub validates the domain and issues a certificate.
-
-Repository files cannot turn on Pages or change external DNS. Do not assume the domain is live until the Pages settings and DNS have been configured. Follow GitHub's current custom-domain documentation for DNS values: https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site
-
-If serving only at the default repository URL, remove `public/CNAME`, update canonical/Open Graph domain metadata if desired, then regenerate `docs/`.
-
-After any source change:
+Pages is configured for **main /docs**. After source changes:
 
 ```sh
 npm run prepare:pages
 ```
 
-Commit both the source and regenerated `docs/`. Do not edit generated assets directly. The default base is `./`; change `base` in `vite.config.ts` only if your host needs a fixed base path.
+Commit both source and regenerated `docs/`. Do not edit generated files directly. `public/CNAME` contains `prashantgrg.com.np`; preserve existing Pages/DNS configuration. No CI workflow is included.
 
-## Content and original documents
+## Content and CV
 
-Content is in `index.html`, deliberately rendered in HTML so it remains readable with JavaScript disabled. The biography is based on supplied identity, location and education. Learning interests are described as study areas, not professional experience.
+Edit `index.html` for portfolio content. Preserve factual student-level descriptions: no employers, professional experience, graduation dates, tool proficiency or project results have been invented.
 
-Original, unchanged PDFs are in `public/certificates/`:
+The only listed project is the actual portfolio, explicitly described as developed with AI assistance. Future security projects should be added only with real scope, evidence and links.
 
-- Pre Security, TryHackMe, 30 April 2025
-- Cyber Security 101, TryHackMe, 13 May 2025
-- Web Fundamentals, TryHackMe, 14 May 2025
-- Jr Penetration Tester, TryHackMe, 15 May 2025
-- Certified Cybersecurity Educator Professional (CCEP), Red Team Leaders, 24 December 2025
+The one-page CV is `public/Prashant-Gurung-CV.pdf`. Edit `scripts/create-cv.py` and regenerate it with Python and ReportLab, then run `npm run prepare:pages`. Review its facts before job applications and add verified graduation dates or practical experience when available.
 
-These files display "Prasan gurung" as issued. The website uses the owner's requested display name "Prashant Gurung". The four TryHackMe documents are learning-path completion certificates and are identified as such. Stats count the supplied documents; they do not claim work experience or client results.
+Original documents are unchanged in `public/certificates/`: four TryHackMe learning-path completion certificates (Pre Security, Cyber Security 101, Web Fundamentals and Jr Penetration Tester) and the Red Team Leaders CCEP certificate. These display the issued name "Prasan gurung". The website uses the requested display name "Prashant Gurung".
 
-### Placeholder checklist
+## Terminal sandbox
 
-- Replace the three explicitly labeled future project slots with real titles, years, scope, descriptions and destination links.
-- Replace procedural project visuals with owned screenshots when those projects exist. Add meaningful alt text if they convey project content.
-- Update each matching archive row and remove its placeholder label only when the project is real.
-- Add a CV PDF and download link when a CV is available. No missing or invented CV link is rendered.
-- Add verified tools, languages or availability only when supplied; no invented values are included.
+`src/ui/Terminal.ts` implements an allowlisted browser simulation. It never uses a system shell, eval, a backend or network scan. Files live in memory and reset on reload. Input and output are rendered with `textContent`.
 
-The position statement and supporting copy are editorial drafts approved by the owner's request to choose remaining content. No employers, client counts, results, project implementations or location history are invented.
+- Profile commands: `help`, `about`, `whoami`, `education`, `skills`, `certificates`, `projects`, `contact`, `cv`.
+- Virtual workspace: `pwd`, `ls`, `cat notes.txt`, `write notes.txt hello`, `rm notes.txt`, `echo hello`.
+- Session controls: `history`, `clear`, `reset`.
+- `scan demo` displays an explicitly fictional educational workflow. Other targets are rejected.
+- Up/down arrows navigate command history; Tab completes an unambiguous command.
 
-## Motion controls
+Portfolio files are read-only. Workspace files are limited to simple .txt names and 20 files; input is capped at 240 characters, history at 50 commands, and rendered output at 80 entries.
 
-All primary motion controls are in `src/config/motion.ts`. Easing and duration tokens are mirrored into CSS custom properties at startup.
+## Motion and accessibility
 
-| Group | Controls |
-| --- | --- |
-| `intensity` | `full`, `medium` or `subtle` |
-| `intro` | Enabled state, 1200ms counter, 900ms curtain |
-| `hero` | Desktop/mobile/subtle tracks, zoom scale, name/frame/fog/flash progress ranges |
-| `statement` | Track length, word entry and shield rise ranges |
-| `slabs` | Track length, entry range, title delay |
-| `archive` | Drum smoothing, opacity/scale falloff, offset and blur |
-| `manifesto` | Track length, line thresholds and reveal range |
-| `scroll` | Progress smoothing and settling threshold |
-| `scramble`, `counter` | Scramble charset/timing and number duration |
-| `snow` | Enable, count, min/max speed |
-| `pointer` | Enable, smoothing, frame tilt and magnetic-link distance |
-| `globe` | Rotation speed, initial boost, inertia, resume delay, pixel ratio and pulse |
-| `altitude` | Enable and 8848m scale |
+Primary settings are in `src/config/motion.ts`. The new hero uses CSS transform animations managed by `src/ui/Hero.ts`; animations pause when hidden/offscreen and have a visible pause button. OS reduced motion disables them. The original high-cost snow, pointer parallax and intro remain off.
 
-Fine visual distances and idle keyframe timings live in `src/styles.css`. The shared `ScrollJourney` owns one requestAnimationFrame scheduler. Scroll events only mark progress dirty. Section geometry is measured on resize, not in the frame loop. Intersection observers limit work; canvas rendering pauses offscreen and when the document is hidden. Canvas point/particle buffers are preallocated. The globe is decorative and intentionally has only one real location marker, Kathmandu.
+`ScrollJourney` owns the shared JavaScript frame scheduler with cached section measurements. The globe has simplified continent silhouettes and redraws only during interaction or settling inertia; it stops offscreen and caps device pixel ratio at 1.5. It is decorative, not a navigation map.
 
-Native scrolling, real anchor links and native details accordions remain usable without JS. Mobile removes the pinned project slabs and archive drum and disables desktop pointer and snow effects. OS reduced motion removes the intro, long scroll tracks, parallax, particles, counters, scramble and automatic globe rotation. Keyboard globe controls remain available. Updating the OS preference reloads the document to reset the animation lifecycle.
-
-The foreground contrast crossover uses relative luminance **0.179**, rather than the original brief's 0.5, because 0.5 would not maintain WCAG AA for white text on intermediate colors. Content sections and the fixed navigation also use explicit readable foreground/background pairs.
+The statement heading, shield and copy occupy separate rows to avoid obscured text. No-JS content remains readable, with native accordions and a static globe fallback. Semantic headings, a skip link, visible focus, a mobile menu focus trap and keyboard controls are included.
 
 ## Stack and assets
 
-- TypeScript strict mode, Vite, vanilla CSS, canvas 2D and inline SVG
-- Self-hosted Latin subsets: Anton 400, Syne 500/600, JetBrains Mono 400
-- Body type uses the operating system sans-serif stack
-- Procedural mountain geometry, gradients, fog, shield and project art; no stock photography
-- Font licenses are included in `public/font-licenses/` and deployed with the site
+Strict TypeScript, Vite, vanilla CSS, inline SVG and Canvas 2D. Anton 400, Syne 500/600 and JetBrains Mono 400 are bundled locally with Latin subsets. Font licenses are in `public/font-licenses/`. All visual artwork is code-generated; the supplied design reference is inspiration, not a copied screenshot asset.
 
 ## Validation
 
-`npm run typecheck` and `npm run build` pass. Local structural checks cover unique IDs, internal targets, document links, no missing public assets, and unchanged certificate bytes. Browser visual QA was unavailable in the build session; review desktop/mobile layout, keyboard behavior and motion in your browser before treating the design as visually signed off.
+TypeScript and production build pass. Terminal checks cover supported commands, immutable profile files, invalid paths, literal HTML handling, external scan rejection, history caps and reset. Internal anchors and file downloads resolve. The CV is one page.
 
-
-## Readability and performance update
-
-The statement now places its heading, shield and copy in separate layout rows so the shield cannot obscure text. The globe has bundled, simplified continent silhouettes with a matching static SVG fallback. It is a decorative map, not a navigation map. It stays still until dragged or adjusted with arrow keys, and stops rendering when inertia settles. Snow, pointer parallax, the intro and continuous fog/shimmer animation are disabled by default. The globe caps pixel ratio at 1.5 and uses fewer wireframe points. Scroll progress no longer updates inherited page-wide color variables on every animation frame; the explicit section palettes remain unchanged.
+Browser visual QA is unavailable in this environment. Review the deployed page at desktop/mobile sizes and test keyboard navigation before treating it as visually signed off.

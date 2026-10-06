@@ -80,7 +80,7 @@ export class ScrollJourney {
   };
   private apply(s: JourneySection): void {
     const p = s.p, style = s.el.style;
-    if (s.el.id === 'top') {
+    if (s.el.id === 'top' && !s.el.classList.contains('cyber-hero')) {
       style.setProperty('--name-drift', range(p, 0, motion.hero.nameEnd).toFixed(4));
       style.setProperty('--name-opacity', (1 - range(p, 0, motion.hero.nameEnd)).toFixed(4));
       style.setProperty('--zoom', (1 + (motion.hero.zoom - 1) * Math.pow(range(p, 0, motion.hero.zoomEnd), 3)).toFixed(4));
